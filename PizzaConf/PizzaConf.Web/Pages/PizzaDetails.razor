@@ -18,7 +18,10 @@ else
     <h1>@pizza.Name</h1>
     <p>
         <em>OH MY GOODNESS!</em>
-        <br/>
+        <div class="mt-3 mb-3">
+            <img style="max-width:200px; max-height:200px;" src="@pizza.ImageUrl" />
+        </div>
+        
         @pizza.Description
     </p>
     <button class="btn btn-outline-primary" @onclick="AddToOrder">Add to order</button>

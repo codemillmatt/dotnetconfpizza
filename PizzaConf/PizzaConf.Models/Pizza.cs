@@ -12,4 +12,7 @@ public class Pizza
 
     [Required]
     public string? Description { get; set; }
+
+    [Required]
+    public string? ImageUrl { get; set; }
 }
