@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PizzaConf.Menu.Api.Data;
 using PizzaConf.Menu.Api.Services;
 using PizzaConf.Models;
@@ -10,7 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSqlite<PizzaContext>("Data Source=pizza.db");
+//builder.Services.AddSqlite<PizzaContext>("Data Source=pizza.db");
+
+builder.Services
+    .AddSqlServer<PizzaContext>(builder.Configuration["ConnectionStrings:MenuDb"],
+    (options) => options.EnableRetryOnFailure());
 
 builder.Services.AddTransient<PizzaService>();
 

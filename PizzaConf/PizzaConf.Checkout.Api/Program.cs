@@ -10,7 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSqlite<ShoppingCartContext>("Data Source=checkout.db");
+//builder.Services.AddSqlite<ShoppingCartContext>("Data Source=checkout.db");
+builder.Services.AddSqlServer<ShoppingCartContext>
+    (builder.Configuration["ConnectionStrings:CheckoutDb"],
+    (options) => options.EnableRetryOnFailure());
+
+
 builder.Services.AddTransient<CartService>();
 
 var app = builder.Build();
