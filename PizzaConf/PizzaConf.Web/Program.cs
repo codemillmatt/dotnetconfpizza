@@ -9,6 +9,19 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<PizzaWebService>();
 builder.Services.AddSingleton<CartWebService>();
+
+builder.Services.AddHttpClient<PizzaWebService>(client =>
+{
+    var baseAddress = new Uri(builder.Configuration["menuUrl"]);
+    client.BaseAddress = baseAddress;
+});
+
+builder.Services.AddHttpClient<CartWebService>(client =>
+{
+    var baseAddress = new Uri(builder.Configuration["cartUrl"]);
+    client.BaseAddress = baseAddress;
+});
+
 builder.Services.AddSingleton<HttpClient>();
 
 var app = builder.Build();
