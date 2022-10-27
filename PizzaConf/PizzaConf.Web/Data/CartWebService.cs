@@ -11,18 +11,28 @@ public class CartWebService
         _httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<OrderedPizza>> GetCartContents()
+    public async Task<IEnumerable<OrderedPizza>?> GetCartContents()
     {
-        throw new NotImplementedException();
+        string url = "https://localhost:7226/cart";
+
+        var contents = await _httpClient.GetFromJsonAsync<IEnumerable<OrderedPizza>>(url);
+
+        return contents;
     }
 
-    public async Task AddPizzaToOrder(string description)
+    public async Task AddPizzaToOrder(string name, string description)
     {
-        throw new NotImplementedException();
+        OrderedPizza pizza = new() { Name = name, PizzaDescription = description, OrderedDate = DateTime.Now };
+
+        string url = "https://localhost:7226/order/";
+
+        await _httpClient.PostAsJsonAsync(url, pizza);
     }
 
     public async Task PlaceOrder()
     {
-        throw new NotImplementedException();
+        string url = "https://localhost:7226/cart";
+
+        await _httpClient.DeleteAsync(url);
     }
 }

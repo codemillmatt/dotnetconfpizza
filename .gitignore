@@ -348,3 +348,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/PizzaConf/PizzaConf.Menu.Api/pizza.db-wal
+/PizzaConf/PizzaConf.Menu.Api/pizza.db-shm
+/PizzaConf/PizzaConf.Menu.Api/pizza.db
+/PizzaConf/PizzaConf.Checkout.Api/checkout.db
+/PizzaConf/PizzaConf.Checkout.Api/checkout.db-shm
+/PizzaConf/PizzaConf.Checkout.Api/checkout.db-wal

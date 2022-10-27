@@ -21,7 +21,7 @@ else
         <br/>
         @pizza.Description
     </p>
-    <button class="btn btn-outline-primary">Add to order</button>
+    <button class="btn btn-outline-primary" @onclick="AddToOrder">Add to order</button>
 }
 
 
@@ -40,7 +40,7 @@ else
 
     private async Task AddToOrder()
     {
-        await cartService.AddPizzaToOrder(pizza.Description);
+        await cartService.AddPizzaToOrder(pizza.Name, pizza.Description);
 
         navigation.NavigateTo("cart");
     }

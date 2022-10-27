@@ -3,23 +3,44 @@
 @using PizzaConf.Models
 @using PizzaConf.Web.Data
 
-@inject CartWebService cart
+@inject CartWebService cartService
+@inject NavigationManager navigation
 
 <PageTitle>Your Pizzas</PageTitle>
 
-@if (Pizzas == null)
+@if (Pizzas == null || Pizzas.Count() == 0)
 {
-    
+    <h3>The cart is empty - let's add some pizza!</h3>
 }
 else
 {
+    <h3>Here are your pizzas</h3>
+
+    <ul>
+        @foreach (var pizza in Pizzas)
+        {
+            <li>@pizza.Name</li>
+        }
+    </ul>
+    
+    <div class="mt-5">
+        <button class="btn btn-outline-primary" @onclick="PlaceOrder">Place order</button>
+    </div>
     
 }
-
-
-<h3>Cart</h3>
 
 @code {
     public IEnumerable<OrderedPizza>? Pizzas;
 
+    protected override async Task OnInitializedAsync()
+    {
+        Pizzas = await cartService.GetCartContents();
+    }
+
+    private async Task PlaceOrder()
+    {
+        await cartService.PlaceOrder();
+
+        navigation.NavigateTo("/");
+    }
 }
