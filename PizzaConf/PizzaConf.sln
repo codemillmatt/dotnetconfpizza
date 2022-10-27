@@ -5,9 +5,11 @@ VisualStudioVersion = 17.4.33015.44
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzaConf.Menu.Api", "PizzaConf.Menu.Api\PizzaConf.Menu.Api.csproj", "{1F251B14-8D5F-484F-89D5-07CFF5DC84D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaConf.Models", "PizzaConf.Models\PizzaConf.Models.csproj", "{D6CD8F14-5B36-479A-A44F-9AFE71BE2EB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzaConf.Models", "PizzaConf.Models\PizzaConf.Models.csproj", "{D6CD8F14-5B36-479A-A44F-9AFE71BE2EB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaConf.Checkout.Api", "PizzaConf.Checkout.Api\PizzaConf.Checkout.Api.csproj", "{9A74FFB4-3F2A-45B6-9261-A27E4D5AAEF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzaConf.Checkout.Api", "PizzaConf.Checkout.Api\PizzaConf.Checkout.Api.csproj", "{9A74FFB4-3F2A-45B6-9261-A27E4D5AAEF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaConf.Web", "PizzaConf.Web\PizzaConf.Web.csproj", "{640ED021-C955-4CBE-B95F-001081B13184}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{9A74FFB4-3F2A-45B6-9261-A27E4D5AAEF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A74FFB4-3F2A-45B6-9261-A27E4D5AAEF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A74FFB4-3F2A-45B6-9261-A27E4D5AAEF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{640ED021-C955-4CBE-B95F-001081B13184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{640ED021-C955-4CBE-B95F-001081B13184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{640ED021-C955-4CBE-B95F-001081B13184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{640ED021-C955-4CBE-B95F-001081B13184}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

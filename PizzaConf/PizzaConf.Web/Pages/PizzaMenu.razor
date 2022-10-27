@@ -1,0 +1,49 @@
+﻿@page "/pizzamenu"
+@using PizzaConf.Web.Data
+@using PizzaConf.Models
+@inject PizzaWebService pizzaService
+@inject NavigationManager navigation
+
+<PageTitle>Pizza Conf Menu</PageTitle>
+
+<h1>Pizza Conf Menu</h1>
+
+<p>Here is our delicious menu</p>
+
+@if (pizzas == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pizza in pizzas)
+            {
+                <tr>
+                    <td>
+                        <a href="pizzadetails/@pizza.Id">
+                            @pizza.Name
+                        </a>
+                    </td>
+                    <td>@pizza.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Pizza>? pizzas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pizzas = await pizzaService.GetMenu();
+    }
+}

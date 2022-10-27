@@ -1,0 +1,47 @@
+﻿@page "/pizzadetails/{Id:int}"
+
+@using PizzaConf.Web.Data
+@using PizzaConf.Models
+
+@inject PizzaWebService pizzaService
+@inject CartWebService cartService
+@inject NavigationManager navigation
+
+<PageTitle>Pizza Details</PageTitle>
+
+@if (pizza == null)
+{
+    <h1>Loading...</h1>
+}
+else
+{
+    <h1>@pizza.Name</h1>
+    <p>
+        <em>OH MY GOODNESS!</em>
+        <br/>
+        @pizza.Description
+    </p>
+    <button class="btn btn-outline-primary">Add to order</button>
+}
+
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private Pizza pizza;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pizza = await pizzaService.GetPizza(Id);
+    }
+
+    private async Task AddToOrder()
+    {
+        await cartService.AddPizzaToOrder(pizza.Description);
+
+        navigation.NavigateTo("cart");
+    }
+}

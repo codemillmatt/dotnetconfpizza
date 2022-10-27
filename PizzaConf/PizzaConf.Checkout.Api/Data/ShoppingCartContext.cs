@@ -9,7 +9,6 @@ public class ShoppingCartContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.LogTo(Console.WriteLine);
 
-    public DbSet<Cart> Carts => Set<Cart>();
     public DbSet<OrderedPizza> Pizzas => Set<OrderedPizza>();
 }
 

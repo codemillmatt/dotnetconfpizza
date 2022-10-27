@@ -1,0 +1,25 @@
+﻿@page "/cart"
+
+@using PizzaConf.Models
+@using PizzaConf.Web.Data
+
+@inject CartWebService cart
+
+<PageTitle>Your Pizzas</PageTitle>
+
+@if (Pizzas == null)
+{
+    
+}
+else
+{
+    
+}
+
+
+<h3>Cart</h3>
+
+@code {
+    public IEnumerable<OrderedPizza>? Pizzas;
+
+}

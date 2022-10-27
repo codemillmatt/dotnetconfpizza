@@ -1,9 +1,17 @@
+using PizzaConf.Checkout.Api.Data;
+using PizzaConf.Checkout.Api.Services;
+using Microsoft.AspNetCore.Mvc;
+using PizzaConf.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSqlite<ShoppingCartContext>("Data Source=checkout.db");
+builder.Services.AddTransient<CartService>();
 
 var app = builder.Build();
 
@@ -16,29 +24,38 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/cart", async ([FromServices]CartService cart) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var contents = await cart.GetCartContents();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    return Results.Ok(contents);
 })
-.WithName("GetWeatherForecast")
+.WithName("GetCartContents")
+.Produces<IEnumerable<OrderedPizza>>(StatusCodes.Status200OK)
 .WithOpenApi();
+
+app.MapDelete("/cart", async ([FromServices] CartService cart) =>
+{
+    await cart.PlaceOrder();
+
+    return Results.NoContent();
+})
+.WithName("PlaceOrder")
+.Produces(StatusCodes.Status204NoContent)
+.WithOpenApi();
+
+app.MapPost("/order", async ([FromBody] OrderedPizza pizza, [FromServices] CartService cart) =>
+{
+    var orderedPizza = await cart.OrderPizza(pizza);
+
+    return Results.CreatedAtRoute(routeName: "OrderPizza", value: orderedPizza);
+})
+.WithName("OrderPizza")
+.Produces<OrderedPizza>(StatusCodes.Status201Created)
+.WithOpenApi();
+
+app.CreateDbIfNotExists();
 
 app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+
