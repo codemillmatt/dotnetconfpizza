@@ -1,0 +1,46 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.SignalRService;
+using Microsoft.OpenApi.Models;
+using System.Threading.Tasks;
+
+using PizzaConf.Models;
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
+
+namespace PizzaConf.DeliveryTracker
+{
+    public class OrderTrackingFunction
+    {
+        [FunctionName("negotiate")]
+        public SignalRConnectionInfo Negotiate(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req,
+            [SignalRConnectionInfo(HubName = "DeliveryInfo")] SignalRConnectionInfo connectionInfo)
+        {
+            return connectionInfo;
+        }
+
+        [FunctionName("trackorder")]
+        [OpenApiOperation(operationId: "TrackOrder", tags: new[] { "track order" })]
+        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The order id to track")]
+        [OpenApiParameter(name: "status", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "New delivery status of the order")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(TrackingMessage), Description = "The OK response")]
+        public async Task<IActionResult> TrackOrder(
+           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "{orderId:int}/{status:alpha}")] HttpRequest req, int orderId, string status,
+           [SignalR(HubName = "DeliveryInfo")] IAsyncCollector<SignalRMessage> deliveryMessages)
+        {
+            TrackingMessage msg = new() { Status = status, OrderId = orderId };
+
+            await deliveryMessages.AddAsync(new SignalRMessage
+            {
+                Target = "newMessage",
+                UserId = orderId.ToString(),
+                Arguments = new[] { msg }
+            });
+
+            return new OkObjectResult(msg);
+        }
+    }
+}
