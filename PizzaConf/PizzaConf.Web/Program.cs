@@ -22,8 +22,6 @@ builder.Services.AddHttpClient<CartWebService>(client =>
     client.BaseAddress = baseAddress;
 });
 
-builder.Services.AddSingleton<HttpClient>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

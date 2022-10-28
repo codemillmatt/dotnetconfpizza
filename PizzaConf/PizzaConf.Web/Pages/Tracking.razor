@@ -4,6 +4,8 @@
 @using PizzaConf.Web.Data
 @using Microsoft.AspNetCore.SignalR.Client
 
+@inject IConfiguration configuration
+
 <h3>Where's My Order?</h3>
 
 The current status of order number @OrderId is:
@@ -24,7 +26,7 @@ The current status of order number @OrderId is:
             await hubConnection.StopAsync();
 
         hubConnection = new HubConnectionBuilder()
-            .WithUrl("http://localhost:7071/api")
+            .WithUrl(configuration["trackingUrl"])
             .WithAutomaticReconnect()
             .Build();
 
