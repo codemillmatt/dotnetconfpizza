@@ -39,8 +39,8 @@ else
 
     private async Task PlaceOrder()
     {
-        await cartService.PlaceOrder();
+        var orderId = await cartService.PlaceOrder();
 
-        navigation.NavigateTo("/");
+        navigation.NavigateTo($"/tracking/{orderId}");
     }
 }

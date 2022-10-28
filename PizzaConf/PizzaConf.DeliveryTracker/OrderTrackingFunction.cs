@@ -15,8 +15,11 @@ namespace PizzaConf.DeliveryTracker
     public class OrderTrackingFunction
     {
         [FunctionName("negotiate")]
+        [OpenApiOperation(operationId:"negotiate", tags: new[] {"register with signalr"},Summary = "Register with SignalR")]
+        [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The order ID")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(SignalRConnectionInfo), Description = "The OK response")]
         public SignalRConnectionInfo Negotiate(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             [SignalRConnectionInfo(HubName = "DeliveryInfo")] SignalRConnectionInfo connectionInfo)
         {
             return connectionInfo;
@@ -36,7 +39,6 @@ namespace PizzaConf.DeliveryTracker
             await deliveryMessages.AddAsync(new SignalRMessage
             {
                 Target = "newMessage",
-                UserId = orderId.ToString(),
                 Arguments = new[] { msg }
             });
 

@@ -29,10 +29,12 @@ public class CartWebService
         await _httpClient.PostAsJsonAsync(url, pizza);
     }
 
-    public async Task PlaceOrder()
+    public async Task<int> PlaceOrder()
     {
         string url = "/cart";
 
         await _httpClient.DeleteAsync(url);
+
+        return Random.Shared.Next(0, 100);
     }
 }

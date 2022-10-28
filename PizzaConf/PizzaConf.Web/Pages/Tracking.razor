@@ -1,0 +1,39 @@
+﻿@page "/tracking/{OrderId:int}"
+
+@using PizzaConf.Models
+@using PizzaConf.Web.Data
+@using Microsoft.AspNetCore.SignalR.Client
+
+<h3>Where's My Order?</h3>
+
+The current status of order number @OrderId is:
+
+<h4>@OrderStatus</h4>
+
+@code {
+    [Parameter]
+    public int OrderId { get; set; }
+
+    public string? OrderStatus { get; set; } = "hi";
+
+    HubConnection? hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (hubConnection != null && hubConnection.State == HubConnectionState.Connected)
+            await hubConnection.StopAsync();
+
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl("http://localhost:7071/api")
+            .WithAutomaticReconnect()
+            .Build();
+
+        hubConnection.On<TrackingMessage>("newMessage", (obj) =>
+        {
+            OrderStatus = obj.Status;
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+    } 
+}
