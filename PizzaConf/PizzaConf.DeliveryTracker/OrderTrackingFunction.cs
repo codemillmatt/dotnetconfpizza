@@ -3,6 +3,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.SignalRService;
+using Microsoft.Extensions.Configuration;
+
 using Microsoft.OpenApi.Models;
 using System.Threading.Tasks;
 
@@ -14,6 +16,15 @@ namespace PizzaConf.DeliveryTracker
 {
     public class OrderTrackingFunction
     {
+        IConfiguration _configuration;
+        string _signalRConnectionString;
+
+        public OrderTrackingFunction(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _signalRConnectionString = _configuration["AzureSignalRConnectionString"];
+        }
+
         [FunctionName("negotiate")]
         [OpenApiOperation(operationId:"negotiate", tags: new[] {"register with signalr"},Summary = "Register with SignalR")]
         [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The order ID")]

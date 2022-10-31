@@ -2,6 +2,7 @@ using PizzaConf.Checkout.Api.Data;
 using PizzaConf.Checkout.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using PizzaConf.Models;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Configuration.AddAzureAppConfiguration((options) =>
+{
+    options.Connect(new Uri(builder.Configuration["appConfigUrl"]), new DefaultAzureCredential())
+        .Select("CheckoutDb")
+        .ConfigureKeyVault((kvOptions) => kvOptions.SetCredential(new DefaultAzureCredential()));
+});
+
 //builder.Services.AddSqlite<ShoppingCartContext>("Data Source=checkout.db");
 builder.Services.AddSqlServer<ShoppingCartContext>
-    (builder.Configuration["ConnectionStrings:CheckoutDb"],
+    (builder.Configuration["CheckoutDb"],
     (options) => options.EnableRetryOnFailure());
 
 

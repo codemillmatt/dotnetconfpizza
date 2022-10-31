@@ -1,6 +1,9 @@
+using Azure.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using PizzaConf.Web.Data;
+
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<PizzaWebService>();
 builder.Services.AddSingleton<CartWebService>();
+
+builder.Configuration.AddAzureAppConfiguration((options) =>
+{
+    // Make sure it doesn't blow up because it doesn't have access to key vault
+    options.Connect(new Uri(builder.Configuration["appConfigUrl"]), new DefaultAzureCredential())
+        .Select("cartUrl").Select("menuUrl").Select("trackingUrl");
+});
 
 builder.Services.AddHttpClient<PizzaWebService>(client =>
 {
@@ -23,6 +33,8 @@ builder.Services.AddHttpClient<CartWebService>(client =>
 });
 
 var app = builder.Build();
+
+app.UseAzureAppConfiguration();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
