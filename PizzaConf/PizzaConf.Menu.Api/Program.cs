@@ -14,13 +14,17 @@ builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddAzureAppConfiguration((options) =>
 {
-    options.Connect(new Uri(builder.Configuration["appConfigUrl"]), new DefaultAzureCredential())
+    string? appConfigUri = builder.Configuration["appConfigUrl"];
+    if (appConfigUri == null)
+        throw new NullReferenceException($"{nameof(appConfigUri)} setting needs to have the Azure App Config url set.");
+
+    options.Connect(new Uri(appConfigUri), new DefaultAzureCredential())
         .Select("menuDb")
         .ConfigureKeyVault(options => options.SetCredential(new DefaultAzureCredential()));
 });
 
 builder.Services
-    .AddSqlServer<PizzaContext>(builder.Configuration["menuDb"],
+    .AddSqlServer<PizzaContext>(builder.Configuration["menuDb"] ?? "Server=(localdb)\\mssqllocaldb;Database=MenuContext-0e9;Trusted_Connection=True;MultipleActiveResultSets=true",
     (options) => options.EnableRetryOnFailure());
 
 builder.Services.AddTransient<PizzaService>();

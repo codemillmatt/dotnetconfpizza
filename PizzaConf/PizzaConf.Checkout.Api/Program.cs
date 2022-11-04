@@ -13,14 +13,19 @@ builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddAzureAppConfiguration((options) =>
 {
-    options.Connect(new Uri(builder.Configuration["appConfigUrl"]), new DefaultAzureCredential())
+    string? appConfigUrl = builder.Configuration["appConfigUrl"] ?? "";
+
+    if (string.IsNullOrEmpty(appConfigUrl))
+        throw new NullReferenceException($"{nameof(appConfigUrl)} setting needs to have the Azure App Config url set.");
+    
+    options.Connect(new Uri(appConfigUrl), new DefaultAzureCredential())
         .Select("CheckoutDb")
         .ConfigureKeyVault((kvOptions) => kvOptions.SetCredential(new DefaultAzureCredential()));
 });
 
 //builder.Services.AddSqlite<ShoppingCartContext>("Data Source=checkout.db");
 builder.Services.AddSqlServer<ShoppingCartContext>
-    (builder.Configuration["CheckoutDb"],
+    (builder.Configuration["CheckoutDb"] ?? "Server=(localdb)\\mssqllocaldb;Database=CartContext-0e9;Trusted_Connection=True;MultipleActiveResultSets=true",
     (options) => options.EnableRetryOnFailure());
 
 

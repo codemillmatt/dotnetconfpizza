@@ -16,8 +16,12 @@ builder.Services.AddSingleton<CartWebService>();
 
 builder.Configuration.AddAzureAppConfiguration((options) =>
 {
+    string? appConfigUrl = builder.Configuration["appConfigUrl"] ?? "";
+    if (string.IsNullOrEmpty(appConfigUrl))
+        throw new NullReferenceException($"{nameof(appConfigUrl)} needs to be set to the value of the Azure App Config url");
+
     // Make sure it doesn't blow up because it doesn't have access to key vault
-    options.Connect(new Uri(builder.Configuration["appConfigUrl"]), new DefaultAzureCredential())
+    options.Connect(new Uri(appConfigUrl), new DefaultAzureCredential())
         .Select("cartUrl").Select("menuUrl").Select("trackingUrl").Select("DaprAppId*");
 });
 
@@ -25,16 +29,12 @@ var daprIds = builder.Configuration.GetSection("DaprAppId:PizzaConf").Get<DaprAp
 
 builder.Services.AddHttpClient<PizzaWebService>(client =>
 {
-    Uri baseAddress;
+    string url = builder.Configuration["menuUrl"] ?? "http://localhost:3500";
+    Uri baseAddress = new Uri(url);
 
     if (!string.IsNullOrEmpty(daprIds?.MenuApi))
     {
-        baseAddress = new Uri("http://localhost:3602");
         client.DefaultRequestHeaders.Add("dapr-app-id", daprIds.MenuApi);
-    }
-    else
-    {
-        baseAddress = new Uri(builder.Configuration["menuUrl"]);
     }
 
     client.BaseAddress = baseAddress;
@@ -42,18 +42,14 @@ builder.Services.AddHttpClient<PizzaWebService>(client =>
 
 builder.Services.AddHttpClient<CartWebService>(client =>
 {
-    Uri baseAddress;
+    string url = builder.Configuration["menuUrl"] ?? "http://localhost:3500";
+    Uri baseAddress = new Uri(url);
 
     if (!string.IsNullOrEmpty(daprIds?.CheckoutApi))
-    {
-        baseAddress = new Uri("http://localhost:3602");
+    {        
         client.DefaultRequestHeaders.Add("dapr-app-id", daprIds.CheckoutApi);
     }
-    else
-    {
-        baseAddress = new Uri(builder.Configuration["cartUrl"]);
-    }
-
+        
     client.BaseAddress = baseAddress;
 });
 
