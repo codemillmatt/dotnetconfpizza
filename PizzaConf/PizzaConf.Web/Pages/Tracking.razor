@@ -8,14 +8,15 @@
 
 <h3>Where's My Order?</h3>
 
-<img src="@OrderStatusUrl" class="rounded" style="max-height:200px; max-width:200px;"/>
-
+<img src="@OrderStatusUrl" class="rounded-circle" style="max-height:200px; max-width:200px;"/>
+<p>@OrderStatus</p>
 
 @code {
     [Parameter]
     public int OrderId { get; set; }
 
-    public string? OrderStatusUrl { get; set; } = "https://pizzaconf.azureedge.net/pizza1.jpg";
+    public string? OrderStatusUrl { get; set; } = "https://pizzaconf.azureedge.net/pizzaimages/pizza1.jpg";
+    public string? OrderStatus { get; set; } = "Waiting for transmission...";
 
     HubConnection? hubConnection;
 
@@ -31,7 +32,7 @@
 
         hubConnection.On<TrackingMessage>("newMessage", (obj) =>
         {
-            OrderStatusUrl = obj.Status;
+            OrderStatusUrl = obj.StatusUrl;
             StateHasChanged();
         });
 

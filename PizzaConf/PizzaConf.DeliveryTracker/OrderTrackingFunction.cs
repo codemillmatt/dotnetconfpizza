@@ -45,23 +45,29 @@ namespace PizzaConf.DeliveryTracker
            [SignalR(HubName = "DeliveryInfo")] IAsyncCollector<SignalRMessage> deliveryMessages)
         {
             string url;
+            string statusText;
+
             switch (status)
             {
                 case 1: 
                     url = "https://pizzaconf.azureedge.net/pizzaimages/order1.jpg";
+                    statusText = "Order received";
                     break;
                 case 2:
                     url = "https://pizzaconf.azureedge.net/pizzaimages/order2.jpg";
+                    statusText = "Order being prepped";
                     break;
                 case 3:
                     url = "https://pizzaconf.azureedge.net/pizzaimages/order3.jpg";
+                    statusText = "It's in the oven!";
                     break;
                 default:
                     url = "https://pizzaconf.azureedge.net/pizzaimages/order4.jpg";
+                    statusText = "It's on it's way!";
                     break;
             }
 
-            TrackingMessage msg = new() { Status = url, OrderId = orderId };
+            TrackingMessage msg = new() { StatusUrl = url, Status = statusText, OrderId = orderId };
 
             await deliveryMessages.AddAsync(new SignalRMessage
             {
