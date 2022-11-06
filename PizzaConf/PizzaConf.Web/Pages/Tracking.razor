@@ -8,15 +8,14 @@
 
 <h3>Where's My Order?</h3>
 
-The current status of order number @OrderId is:
+<img src="@OrderStatusUrl" class="rounded" style="max-height:200px; max-width:200px;"/>
 
-<h4>@OrderStatus</h4>
 
 @code {
     [Parameter]
     public int OrderId { get; set; }
 
-    public string? OrderStatus { get; set; } = "hi";
+    public string? OrderStatusUrl { get; set; } = "https://pizzaconf.azureedge.net/pizza1.jpg";
 
     HubConnection? hubConnection;
 
@@ -32,7 +31,7 @@ The current status of order number @OrderId is:
 
         hubConnection.On<TrackingMessage>("newMessage", (obj) =>
         {
-            OrderStatus = obj.Status;
+            OrderStatusUrl = obj.Status;
             StateHasChanged();
         });
 
