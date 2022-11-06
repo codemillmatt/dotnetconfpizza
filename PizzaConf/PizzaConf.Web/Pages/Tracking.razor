@@ -9,7 +9,7 @@
 <h3>Where's My Order?</h3>
 
 <img src="@OrderStatusUrl" class="rounded-circle" style="max-height:200px; max-width:200px;"/>
-<p>@OrderStatus</p>
+<div class="mt-3">@OrderStatus</div>
 
 @code {
     [Parameter]
@@ -33,6 +33,7 @@
         hubConnection.On<TrackingMessage>("newMessage", (obj) =>
         {
             OrderStatusUrl = obj.StatusUrl;
+            OrderStatus = obj.Status;
             StateHasChanged();
         });
 
