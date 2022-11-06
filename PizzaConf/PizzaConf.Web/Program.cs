@@ -30,7 +30,7 @@ var daprIds = builder.Configuration.GetSection("DaprAppId:PizzaConf").Get<DaprAp
 builder.Services.AddHttpClient<PizzaWebService>(client =>
 {
     string url = builder.Configuration["menuUrl"] ?? "http://localhost:3500";
-    Uri baseAddress = new Uri(url);
+    Uri baseAddress = new(url);
 
     if (!string.IsNullOrEmpty(daprIds?.MenuApi))
     {
@@ -42,8 +42,8 @@ builder.Services.AddHttpClient<PizzaWebService>(client =>
 
 builder.Services.AddHttpClient<CartWebService>(client =>
 {
-    string url = builder.Configuration["menuUrl"] ?? "http://localhost:3500";
-    Uri baseAddress = new Uri(url);
+    string url = builder.Configuration["cartUrl"] ?? "http://localhost:3500";
+    Uri baseAddress = new(url);
 
     if (!string.IsNullOrEmpty(daprIds?.CheckoutApi))
     {        
