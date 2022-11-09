@@ -1,4 +1,6 @@
+using Azure.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PizzaConf.Menu.Api.Data;
 using PizzaConf.Menu.Api.Services;
 using PizzaConf.Models;
@@ -10,7 +12,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSqlite<PizzaContext>("Data Source=pizza.db");
+builder.Configuration.AddAzureAppConfiguration((options) =>
+{
+    string? appConfigUri = builder.Configuration["appConfigUrl"];
+    if (appConfigUri == null)
+        throw new NullReferenceException($"{nameof(appConfigUri)} setting needs to have the Azure App Config url set.");
+
+    options.Connect(new Uri(appConfigUri), new DefaultAzureCredential())
+        .Select("menuDb")
+        .ConfigureKeyVault(options => options.SetCredential(new DefaultAzureCredential()));
+});
+
+builder.Services
+    .AddSqlServer<PizzaContext>(builder.Configuration["menuDb"] ?? "Server=(localdb)\\mssqllocaldb;Database=MenuContext-0e9;Trusted_Connection=True;MultipleActiveResultSets=true",
+    (options) => options.EnableRetryOnFailure());
 
 builder.Services.AddTransient<PizzaService>();
 

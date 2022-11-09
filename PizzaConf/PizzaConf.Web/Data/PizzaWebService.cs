@@ -13,14 +13,14 @@ public class PizzaWebService
 
     public async Task<IEnumerable<Pizza>?> GetMenu()
     {
-        var allThePizzas = await _httpClient.GetFromJsonAsync<IEnumerable<Pizza>?>("https://localhost:7180/pizzas");
+        var allThePizzas = await _httpClient.GetFromJsonAsync<IEnumerable<Pizza>?>("/pizzas");
 
         return allThePizzas;
     }
 
-    public async Task<Pizza> GetPizza(int pizzaId)
+    public async Task<Pizza?> GetPizza(int pizzaId)
     {
-        var url = $"https://localhost:7180/pizzas/{pizzaId}";
+        var url = $"/pizzas/{pizzaId}";
 
         var thePizza = await _httpClient.GetFromJsonAsync<Pizza>(url);
 

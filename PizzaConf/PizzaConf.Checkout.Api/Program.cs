@@ -2,6 +2,7 @@ using PizzaConf.Checkout.Api.Data;
 using PizzaConf.Checkout.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using PizzaConf.Models;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSqlite<ShoppingCartContext>("Data Source=checkout.db");
+builder.Configuration.AddAzureAppConfiguration((options) =>
+{
+    string? appConfigUrl = builder.Configuration["appConfigUrl"] ?? "";
+
+    if (string.IsNullOrEmpty(appConfigUrl))
+        throw new NullReferenceException($"{nameof(appConfigUrl)} setting needs to have the Azure App Config url set.");
+    
+    options.Connect(new Uri(appConfigUrl), new DefaultAzureCredential())
+        .Select("CheckoutDb")
+        .ConfigureKeyVault((kvOptions) => kvOptions.SetCredential(new DefaultAzureCredential()));
+});
+
+//builder.Services.AddSqlite<ShoppingCartContext>("Data Source=checkout.db");
+builder.Services.AddSqlServer<ShoppingCartContext>
+    (builder.Configuration["CheckoutDb"] ?? "Server=(localdb)\\mssqllocaldb;Database=CartContext-0e9;Trusted_Connection=True;MultipleActiveResultSets=true",
+    (options) => options.EnableRetryOnFailure());
+
+
 builder.Services.AddTransient<CartService>();
 
 var app = builder.Build();

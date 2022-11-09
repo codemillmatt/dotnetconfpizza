@@ -13,7 +13,7 @@ public class CartWebService
 
     public async Task<IEnumerable<OrderedPizza>?> GetCartContents()
     {
-        string url = "https://localhost:7226/cart";
+        string url = "/cart";
 
         var contents = await _httpClient.GetFromJsonAsync<IEnumerable<OrderedPizza>>(url);
 
@@ -24,15 +24,17 @@ public class CartWebService
     {
         OrderedPizza pizza = new() { Name = name, PizzaDescription = description, OrderedDate = DateTime.Now };
 
-        string url = "https://localhost:7226/order/";
+        string url = "/order";
 
         await _httpClient.PostAsJsonAsync(url, pizza);
     }
 
-    public async Task PlaceOrder()
+    public async Task<int> PlaceOrder()
     {
-        string url = "https://localhost:7226/cart";
+        string url = "/cart";
 
         await _httpClient.DeleteAsync(url);
+
+        return Random.Shared.Next(0, 100);
     }
 }
