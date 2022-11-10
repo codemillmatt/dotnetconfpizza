@@ -95,7 +95,8 @@ module cdn './core/cdn/endpoint.bicep' = {
 // output AZURE_CONTAINER_ENVIRONMENT_NAME string = containerApps.outputs.environmentName
 // output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
 // output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
-// output AZURE_LOCATION string = location
+
+output AZURE_LOCATION string = location
 output AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.name
 output AZURE_CDN_HOST_NAME string = cdn.outputs.hostName
 output AZURE_TENANT_ID string = tenant().tenantId
