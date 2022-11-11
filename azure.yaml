@@ -5,8 +5,7 @@ metadata:
   template: dotnetconf-whirlwind@0.0.1-beta
 services:
   tracker:
-    project: ./PizzaConf/PizzaConf.DeliveryTracker
-    dist: build
+    project: PizzaConf/PizzaConf.DeliveryTracker
     language: csharp
     host: function
     module: app/tracker

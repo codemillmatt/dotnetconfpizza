@@ -166,37 +166,37 @@ module functions './core/host/functions.bicep' = {
 }
 
 // Container apps host (including container registry)
-module containerApps './core/host/container-apps.bicep' = {
-    name: 'container-apps'
-    scope: rg
-    params: {
-        name: 'app'
-        containerAppsEnvironmentName: !empty(containerAppsEnvironmentName) ? containerAppsEnvironmentName : '${abbrs.appManagedEnvironments}${resourceToken}'
-        containerRegistryName: !empty(containerRegistryName) ? containerRegistryName : '${abbrs.containerRegistryRegistries}${resourceToken}'
-        location: location
-        logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
-    }
-}
+// module containerApps './core/host/container-apps.bicep' = {
+//     name: 'container-apps'
+//     scope: rg
+//     params: {
+//         name: 'app'
+//         containerAppsEnvironmentName: !empty(containerAppsEnvironmentName) ? containerAppsEnvironmentName : '${abbrs.appManagedEnvironments}${resourceToken}'
+//         containerRegistryName: !empty(containerRegistryName) ? containerRegistryName : '${abbrs.containerRegistryRegistries}${resourceToken}'
+//         location: location
+//         logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
+//     }
+// }
 
-// Monitor application with Azure Monitor
-module monitoring './core/monitor/monitoring.bicep' = {
-    name: 'monitoring'
-    scope: rg
-    params: {
-        location: location
-        tags: tags
-        logAnalyticsName: !empty(logAnalyticsName) ? logAnalyticsName : '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
-        applicationInsightsName: !empty(applicationInsightsName) ? applicationInsightsName : '${abbrs.insightsComponents}${resourceToken}'
-        applicationInsightsDashboardName: !empty(applicationInsightsDashboardName) ? applicationInsightsDashboardName : '${abbrs.portalDashboards}${resourceToken}'
-    }
-}
+// // Monitor application with Azure Monitor
+// module monitoring './core/monitor/monitoring.bicep' = {
+//     name: 'monitoring'
+//     scope: rg
+//     params: {
+//         location: location
+//         tags: tags
+//         logAnalyticsName: !empty(logAnalyticsName) ? logAnalyticsName : '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
+//         applicationInsightsName: !empty(applicationInsightsName) ? applicationInsightsName : '${abbrs.insightsComponents}${resourceToken}'
+//         applicationInsightsDashboardName: !empty(applicationInsightsDashboardName) ? applicationInsightsDashboardName : '${abbrs.portalDashboards}${resourceToken}'
+//     }
+// }
 
-output APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.applicationInsightsConnectionString
-output APPLICATIONINSIGHTS_INSTRUMENTATIONKEY string = monitoring.outputs.applicationInsightsInstrumentationKey
-output APPLICATIONINSIGHTS_NAME string = monitoring.outputs.applicationInsightsName
-output AZURE_CONTAINER_ENVIRONMENT_NAME string = containerApps.outputs.environmentName
-output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
-output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
+// output APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.applicationInsightsConnectionString
+// output APPLICATIONINSIGHTS_INSTRUMENTATIONKEY string = monitoring.outputs.applicationInsightsInstrumentationKey
+// output APPLICATIONINSIGHTS_NAME string = monitoring.outputs.applicationInsightsName
+// output AZURE_CONTAINER_ENVIRONMENT_NAME string = containerApps.outputs.environmentName
+// output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
+// output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
 
 output AZURE_LOCATION string = location
 output AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.name
