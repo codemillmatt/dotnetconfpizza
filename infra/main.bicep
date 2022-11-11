@@ -53,6 +53,10 @@ param containerAppsEnvironmentName string = ''
 param containerRegistryName string = ''
 param logAnalyticsName string = ''
 
+param checkoutApiImageName string = ''
+param menuApiImageName string = ''
+param webAppImageName string = ''
+
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
 var abbrs = loadJsonContent('abbreviations.json')
@@ -165,38 +169,42 @@ module functions './core/host/functions.bicep' = {
     }
 }
 
-// Container apps host (including container registry)
-module containerApps './core/host/container-apps.bicep' = {
-    name: 'container-apps'
+module logAnalytics './core/log-analytics/log-analytics.bicep' = {
+    name: 'loganalytics'
     scope: rg
     params: {
-        name: 'app'
-        containerAppsEnvironmentName: !empty(containerAppsEnvironmentName) ? containerAppsEnvironmentName : '${abbrs.appManagedEnvironments}${resourceToken}'
-        containerRegistryName: !empty(containerRegistryName) ? containerRegistryName : '${abbrs.containerRegistryRegistries}${resourceToken}'
+        name: !empty(logAnalyticsName) ? logAnalyticsName : '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
         location: location
-        logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
+        tags: tags
     }
 }
 
-// // Monitor application with Azure Monitor
-module monitoring './core/monitor/monitoring.bicep' = {
-    name: 'monitoring'
+module cae './core/container-apps/container-apps.bicep' = {
+    name: 'cae'
     scope: rg
     params: {
         location: location
         tags: tags
-        logAnalyticsName: !empty(logAnalyticsName) ? logAnalyticsName : '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
-        applicationInsightsName: !empty(applicationInsightsName) ? applicationInsightsName : '${abbrs.insightsComponents}ace${resourceToken}'
-        applicationInsightsDashboardName: !empty(applicationInsightsDashboardName) ? applicationInsightsDashboardName : '${abbrs.portalDashboards}${resourceToken}'
+        containerAppsEnvName: !empty(containerAppsEnvironmentName) ? containerAppsEnvironmentName : '${abbrs.appManagedEnvironments}${resourceToken}'
+        containerRegistryName: !empty(containerRegistryName) ? containerRegistryName : '${abbrs.containerRegistryRegistries}${resourceToken}'
+        logAnalyticsWorkspaceName: logAnalytics.outputs.logAnalyticsWorkspaceName
     }
 }
 
-output APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.applicationInsightsConnectionString
-output APPLICATIONINSIGHTS_INSTRUMENTATIONKEY string = monitoring.outputs.applicationInsightsInstrumentationKey
-output APPLICATIONINSIGHTS_NAME string = monitoring.outputs.applicationInsightsName
-output AZURE_CONTAINER_ENVIRONMENT_NAME string = containerApps.outputs.environmentName
-output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
-output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
+module menuApi './app/menu-api.bicep' = {
+    name: 'menuAPi'
+    scope: rg
+    params: {
+        location: location
+        tags: tags
+        appConfigName: appConfig.outputs.appConfigName
+        caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
+        containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
+        keyVaultName: keyVault.name
+        imageName: menuApiImageName
+        name: 'pizzaconf-menu'
+    }
+}
 
 output AZURE_LOCATION string = location
 output AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.name

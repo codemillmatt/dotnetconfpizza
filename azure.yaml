@@ -12,7 +12,6 @@ services:
     project: PizzaConf/PizzaConf.Menu.Api
     language: csharp
     host: containerapp
-    module: app/menu
     docker:
       path: ./Dockerfile
       context: ../
