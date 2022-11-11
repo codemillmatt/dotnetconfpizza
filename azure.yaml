@@ -8,4 +8,11 @@ services:
     project: PizzaConf/PizzaConf.DeliveryTracker
     language: csharp
     host: function
-    module: app/tracker
+  menu:
+    project: PizzaConf/PizzaConf.Menu.Api
+    language: csharp
+    host: containerapp
+    module: app/menu
+    docker:
+      path: ./Dockerfile
+      context: ../
