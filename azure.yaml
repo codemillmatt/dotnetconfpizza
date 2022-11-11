@@ -1,9 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
 name: dotnetconfpizza
-infra:
-    provider: ""
-    path: ""
-    module: ""
-pipeline:
-    provider: ""
+metadata:
+  template: dotnetconf-whirlwind@0.0.1-beta
+services:
+  tracker:
+    project: ./PizzaConf/PizzaConf.DeliveryTracker
+    dist: build
+    language: csharp
+    host: function
+    module: app/tracker
