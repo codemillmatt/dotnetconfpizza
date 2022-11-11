@@ -8,9 +8,11 @@ param containerAppsEnvironmentName string
 param containerRegistryName string
 param external bool = false
 param imageName string
+param containerName string
 param serviceName string
 param targetPort int = 80
 param appConfigUrl string
+param daprAppId string
 
 module app '../core/host/container-app.bicep' = {
   name: '${serviceName}-container-app-shared-module'
@@ -19,7 +21,7 @@ module app '../core/host/container-app.bicep' = {
     location: location
     tags: union(tags, { 'azd-env-name': environmentName, 'azd-service-name': serviceName })
     containerAppsEnvironmentName: containerAppsEnvironmentName
-    containerName: serviceName
+    containerName: containerName
     containerRegistryName: containerRegistryName
     env: [
       {
@@ -46,6 +48,7 @@ module app '../core/host/container-app.bicep' = {
     external: external
     imageName: !empty(imageName) ? imageName : 'nginx:latest'
     targetPort: targetPort
+    daprAppId: daprAppId
   }
 }
 

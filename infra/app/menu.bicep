@@ -11,6 +11,7 @@ param serviceName string = 'pizzaconf-menu'
 param targetPort int = 80
 param external bool = true
 param appConfigUrl string
+param daprAppId string
 
 module app 'containerapp.bicep' = {
   name: '${serviceName}-container-app-module'
@@ -22,11 +23,13 @@ module app 'containerapp.bicep' = {
     applicationInsightsInstrumentationKey: applicationInsightsInstrumentationKey
     containerAppsEnvironmentName: containerAppsEnvironmentName
     containerRegistryName: containerRegistryName
-    imageName: imageName
+    imageName: 'latest'
     serviceName: serviceName
     targetPort: targetPort
     external: external
     appConfigUrl: appConfigUrl
+    daprAppId: daprAppId
+    containerName: 'pizzaconfmenuapi'
   }
 }
 

@@ -25,6 +25,9 @@
       },
       "appConfigUrl": {
         "value": "${APP_CONFIG_URL}"
+      },
+      "daprAppId": {
+        "value": "menuapi"
       }
     }
   }

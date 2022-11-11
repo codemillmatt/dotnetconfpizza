@@ -11,6 +11,7 @@ param imageName string
 param keyVaultName string = ''
 param managedIdentity bool = !empty(keyVaultName)
 param targetPort int = 80
+param daprAppId string
 
 @description('CPU cores allocated to a single container instance, e.g. 0.5')
 param containerCpuCoreCount string = '0.5'
@@ -24,8 +25,13 @@ resource app 'Microsoft.App/containerApps@2022-03-01' = {
   tags: tags
   identity: { type: managedIdentity ? 'SystemAssigned' : 'None' }
   properties: {
+    
     managedEnvironmentId: containerAppsEnvironment.id
     configuration: {
+      dapr: {
+        appId: daprAppId
+        enabled: true
+      }
       activeRevisionsMode: 'single'
       ingress: {
         external: external
