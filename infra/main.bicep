@@ -205,3 +205,4 @@ output AZURE_TENANT_ID string = tenant().tenantId
 output SQL_SERVER_URL string = sql.outputs.sqlServerUrl
 output SQL_ADMIN string = sql.outputs.sqlAdmin
 output SIGNALR_URL string = signalr.outputs.signalRFullUrl
+output APP_CONFIG_URL string = appConfig.outputs.appConfigUrl
