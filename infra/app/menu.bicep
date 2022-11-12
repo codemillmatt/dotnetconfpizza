@@ -1,5 +1,5 @@
-param name string
 param location string = resourceGroup().location
+param environmentName string
 param tags object = {}
 
 param caeName string
@@ -7,6 +7,8 @@ param appConfigName string
 param keyVaultName string
 param containerRegistryName string
 param imageName string
+
+var serviceName = 'menu'
 
 resource containerAppEnvironment 'Microsoft.App/managedEnvironments@2022-06-01-preview' existing = {
   name: caeName
@@ -25,13 +27,19 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-pr
 }
 
 resource menuApi 'Microsoft.App/containerApps@2022-06-01-preview' = {
-  name: name
+  name: '${environmentName}${serviceName}'
   location: location
-  tags: union(tags, { 'azd-service-name': 'menu' })
+  tags: union(tags, { 'azd-service-name': serviceName })
   identity: { type: 'SystemAssigned' }
   properties: {
     managedEnvironmentId: containerAppEnvironment.id
     configuration: {
+      ingress: {
+        external: true
+        targetPort: 80
+        allowInsecure: false
+        transport: 'auto'
+      }
       activeRevisionsMode: 'Single'
       dapr: {
         enabled: true
@@ -88,5 +96,14 @@ resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2022-0
       }
     ]
   }
-  
+}
+
+resource appConfigAccessPolicies 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(menuApi.name, appConfig.name)
+  scope: appConfig
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '516239f1-63e1-4d78-a4de-a74fb236a071')
+    principalId: menuApi.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
 }

@@ -12,13 +12,13 @@
         "value": "${AZURE_PRINCIPAL_ID}"
       },
       "checkoutApiImageName": {
-        "value": "${CHECKOUT_API_IMAGE_NAME}"
+        "value": "${SERVICE_CHECKOUT_IMAGE_NAME}"
       },
       "menuApiImageName": {
-        "value": "${MENU_API_IMAGE_NAME}"
+        "value": "${SERVICE_MENU_IMAGE_NAME}"
       },
       "webAppImageName": {
-        "value": "${WEB_APP_IMAGE_NAME}"
+        "value": "${SERVICE_WEB_IMAGE_NAME}"
       }
     }
   }

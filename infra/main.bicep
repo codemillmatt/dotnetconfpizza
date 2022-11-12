@@ -191,20 +191,53 @@ module cae './core/container-apps/container-apps.bicep' = {
     }
 }
 
-module menuApi './app/menu-api.bicep' = {
-    name: 'menuAPi'
-    scope: rg
-    params: {
-        location: location
-        tags: tags
-        appConfigName: appConfig.outputs.appConfigName
-        caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
-        containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
-        keyVaultName: keyVault.name
-        imageName: menuApiImageName
-        name: 'pizzaconf-menu'
-    }
-}
+// module menuApi './app/menu-api.bicep' = {
+//     name: 'menuAPi'
+//     scope: rg
+//     params: {
+//         location: location
+//         tags: tags
+//         appConfigName: appConfig.outputs.appConfigName
+//         caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
+//         containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
+//         keyVaultName: keyVault.outputs.keyVaultName
+//         imageName: menuApiImageName
+//         name: 'pizzaconf-menu'
+//         resourceToken: resourceToken
+//     }
+// }
+
+// module checkoutApi './app/checkout-api.bicep' = {
+//     name: 'checkoutAPI'
+//     scope: rg
+//     params: {
+//         location: location
+//         tags: tags
+//         appConfigName: appConfig.outputs.appConfigName
+//         caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
+//         containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
+//         keyVaultName: keyVault.outputs.keyVaultName
+//         imageName: checkoutApiImageName
+//         name: 'pizzaconf-checkout'
+//         resourceToken: resourceToken
+//     }
+// }
+
+// module web './app/web.bicep' = {
+//     name: 'web'
+//     scope: rg
+//     params: {
+//         location: location
+//         tags: tags        
+//         imageName: webAppImageName
+//         appConfigName: appConfig.outputs.appConfigName
+//         caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
+//         containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
+//         keyVaultName: keyVault.outputs.keyVaultName
+//         name: 'pizzaconf-web'
+//         resourceToken: resourceToken
+//     }
+// }
 
 output AZURE_LOCATION string = location
 output AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.name
@@ -214,3 +247,8 @@ output SQL_SERVER_URL string = sql.outputs.sqlServerUrl
 output SQL_ADMIN string = sql.outputs.sqlAdmin
 output SIGNALR_URL string = signalr.outputs.signalRFullUrl
 output APP_CONFIG_URL string = appConfig.outputs.appConfigUrl
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = cae.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
+output AZURE_APP_CONFIG_NAME string = appConfig.outputs.appConfigName
+output AZURE_CONTAINER_APPS_ENVIRONMENT_NAME string = cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
+output AZURE_CONTAINER_REGISTRY_NAME string = cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
+output AZURE_KEYVAULT_NAME string = keyVault.outputs.keyVaultName
