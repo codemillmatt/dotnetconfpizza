@@ -144,7 +144,7 @@ resource trackingUrlStore 'Microsoft.AppConfiguration/configurationStores/keyVal
   parent: appConfig
   name: trackingUrlKeyName
   properties: {
-    value: functionApp.properties.defaultHostName
+    value: 'https://${functionApp.properties.defaultHostName}'
   }
 }
 

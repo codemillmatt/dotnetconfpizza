@@ -13,7 +13,7 @@ services:
     dist: build
     language: csharp
     host: containerapp
-    module: app/menu-api 
+    module: app/menu
     docker:
       path: ./Dockerfile
       context: ../

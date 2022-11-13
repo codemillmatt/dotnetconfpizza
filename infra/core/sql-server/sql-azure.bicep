@@ -44,7 +44,7 @@ resource checkoutDb 'Microsoft.Sql/servers/databases@2022-05-01-preview' = {
   }
 }
 
-var checkoutConnectionString = 'Data Source=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${checkoutDbName};User ID=${sqlServerAdminLogin};Password=${sqlServerAdminPassword}'
+var checkoutConnectionString = 'Data Source=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${checkoutDbName};User ID=${sqlServerAdminLogin}@${sqlServer.name};Password=${sqlServerAdminPassword}'
 
 resource menuDb 'Microsoft.Sql/servers/databases@2022-05-01-preview' = {
   name: menuDbName

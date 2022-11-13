@@ -42,7 +42,7 @@ resource checkoutApi 'Microsoft.App/containerApps@2022-06-01-preview' = {
       activeRevisionsMode: 'Single'
       dapr: {
         enabled: true
-        appId: 'checkout-api'
+        appId: 'checkoutapi'
       }
       secrets: [
         {

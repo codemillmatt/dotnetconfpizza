@@ -43,7 +43,7 @@ resource menuApi 'Microsoft.App/containerApps@2022-06-01-preview' = {
       activeRevisionsMode: 'Single'
       dapr: {
         enabled: true
-        appId: 'menu-api'
+        appId: 'menuapi'
       }
       secrets: [
         {

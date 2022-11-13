@@ -43,19 +43,15 @@ param appConfigDaprMenuApiValue string = 'menuapi'
 param appConfigMenuDbKeyName string = 'menuDb'
 param appConfigMenuUrlKeyName string = 'menuUrl'
 param appConfigTrackingUrlKeyName string = 'trackingUrl'
+param appConfigCdnUrlKeyName string = 'cdnUrl'
 
 param functionAppName string = ''
 param functionAppPlanName string = ''
 
-param applicationInsightsDashboardName string = ''
-param applicationInsightsName string = ''
 param containerAppsEnvironmentName string = ''
 param containerRegistryName string = ''
 param logAnalyticsName string = ''
 
-param checkoutApiImageName string = ''
-param menuApiImageName string = ''
-param webAppImageName string = ''
 
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
@@ -150,6 +146,8 @@ module appConfig './core/app-config/azure-app-config.bicep' = {
         menuUrlKeyName: appConfigMenuUrlKeyName
         menuUrlValue: 'http://localhost:3500'
         signalRSecretUri: signalr.outputs.signalRSecretUri
+        imageCdnHostUrlKeyName: appConfigCdnUrlKeyName
+        imageCdnHostUrlValue: cdn.outputs.hostName
     }
 }
 
@@ -190,54 +188,6 @@ module cae './core/container-apps/container-apps.bicep' = {
         logAnalyticsWorkspaceName: logAnalytics.outputs.logAnalyticsWorkspaceName
     }
 }
-
-// module menuApi './app/menu-api.bicep' = {
-//     name: 'menuAPi'
-//     scope: rg
-//     params: {
-//         location: location
-//         tags: tags
-//         appConfigName: appConfig.outputs.appConfigName
-//         caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
-//         containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
-//         keyVaultName: keyVault.outputs.keyVaultName
-//         imageName: menuApiImageName
-//         name: 'pizzaconf-menu'
-//         resourceToken: resourceToken
-//     }
-// }
-
-// module checkoutApi './app/checkout-api.bicep' = {
-//     name: 'checkoutAPI'
-//     scope: rg
-//     params: {
-//         location: location
-//         tags: tags
-//         appConfigName: appConfig.outputs.appConfigName
-//         caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
-//         containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
-//         keyVaultName: keyVault.outputs.keyVaultName
-//         imageName: checkoutApiImageName
-//         name: 'pizzaconf-checkout'
-//         resourceToken: resourceToken
-//     }
-// }
-
-// module web './app/web.bicep' = {
-//     name: 'web'
-//     scope: rg
-//     params: {
-//         location: location
-//         tags: tags        
-//         imageName: webAppImageName
-//         appConfigName: appConfig.outputs.appConfigName
-//         caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
-//         containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
-//         keyVaultName: keyVault.outputs.keyVaultName
-//         name: 'pizzaconf-web'
-//         resourceToken: resourceToken
-//     }
-// }
 
 output AZURE_LOCATION string = location
 output AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.name
