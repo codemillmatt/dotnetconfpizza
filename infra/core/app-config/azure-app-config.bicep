@@ -19,6 +19,8 @@ param daprCheckoutApiValue string
 param daprMenuApiValue string
 param menuUrlValue string
 
+param imageCdnHostUrlKeyName string
+param imageCdnHostUrlValue string
 
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
   name: name
@@ -53,6 +55,14 @@ resource checkoutDbKeyVaultStore 'Microsoft.AppConfiguration/configurationStores
   properties: {
     value: string({ uri: checkoutSecretUri })
     contentType: 'application/vnd.microsoft.appconfig.keyvaultref+json;charset=utf-8'
+  }
+}
+
+resource imageCdnUrlStore 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: appConfig
+  name: imageCdnHostUrlKeyName
+  properties: {
+    value: imageCdnHostUrlValue
   }
 }
 

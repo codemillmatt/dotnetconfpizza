@@ -43,19 +43,15 @@ param appConfigDaprMenuApiValue string = 'menuapi'
 param appConfigMenuDbKeyName string = 'menuDb'
 param appConfigMenuUrlKeyName string = 'menuUrl'
 param appConfigTrackingUrlKeyName string = 'trackingUrl'
+param appConfigCdnUrlKeyName string = 'cdnUrl'
 
 param functionAppName string = ''
 param functionAppPlanName string = ''
 
-param applicationInsightsDashboardName string = ''
-param applicationInsightsName string = ''
 param containerAppsEnvironmentName string = ''
 param containerRegistryName string = ''
 param logAnalyticsName string = ''
 
-param checkoutApiImageName string = ''
-param menuApiImageName string = ''
-param webAppImageName string = ''
 
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
@@ -150,6 +146,8 @@ module appConfig './core/app-config/azure-app-config.bicep' = {
         menuUrlKeyName: appConfigMenuUrlKeyName
         menuUrlValue: 'http://localhost:3500'
         signalRSecretUri: signalr.outputs.signalRSecretUri
+        imageCdnHostUrlKeyName: appConfigCdnUrlKeyName
+        imageCdnHostUrlValue: cdn.outputs.hostName
     }
 }
 
@@ -191,21 +189,6 @@ module cae './core/container-apps/container-apps.bicep' = {
     }
 }
 
-module menuApi './app/menu-api.bicep' = {
-    name: 'menuAPi'
-    scope: rg
-    params: {
-        location: location
-        tags: tags
-        appConfigName: appConfig.outputs.appConfigName
-        caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
-        containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
-        keyVaultName: keyVault.outputs.keyVaultName
-        imageName: menuApiImageName
-        name: 'pizzaconf-menu'
-    }
-}
-
 output AZURE_LOCATION string = location
 output AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.name
 output AZURE_CDN_HOST_NAME string = cdn.outputs.hostName
@@ -214,3 +197,8 @@ output SQL_SERVER_URL string = sql.outputs.sqlServerUrl
 output SQL_ADMIN string = sql.outputs.sqlAdmin
 output SIGNALR_URL string = signalr.outputs.signalRFullUrl
 output APP_CONFIG_URL string = appConfig.outputs.appConfigUrl
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = cae.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
+output AZURE_APP_CONFIG_NAME string = appConfig.outputs.appConfigName
+output AZURE_CONTAINER_APPS_ENVIRONMENT_NAME string = cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
+output AZURE_CONTAINER_REGISTRY_NAME string = cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
+output AZURE_KEYVAULT_NAME string = keyVault.outputs.keyVaultName
