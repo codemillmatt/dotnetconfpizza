@@ -200,7 +200,7 @@ module menuApi './app/menu-api.bicep' = {
         appConfigName: appConfig.outputs.appConfigName
         caeName: cae.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_NAME
         containerRegistryName: cae.outputs.AZURE_CONTAINER_REGISTRY_NAME
-        keyVaultName: keyVault.name
+        keyVaultName: keyVault.outputs.keyVaultName
         imageName: menuApiImageName
         name: 'pizzaconf-menu'
     }
