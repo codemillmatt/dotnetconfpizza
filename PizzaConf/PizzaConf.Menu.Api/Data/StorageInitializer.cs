@@ -19,7 +19,10 @@ public static class StorageInitializer
             {
                 var imageClient = containerClient.GetBlobClient(imageFileName);
 
-                var response = await imageClient.UploadAsync(imageFileName, overwrite: false);
+                var blobExists = (await imageClient.ExistsAsync()).Value;
+
+                if (!blobExists)
+                    await imageClient.UploadAsync(imageFileName, overwrite: false);
             }
             catch (Exception ex)
             {

@@ -22,7 +22,7 @@ builder.Configuration.AddAzureAppConfiguration((options) =>
 
     // Make sure it doesn't blow up because it doesn't have access to key vault
     options.Connect(new Uri(appConfigUrl), new DefaultAzureCredential())
-        .Select("cartUrl").Select("menuUrl").Select("trackingUrl").Select("DaprAppId*");
+        .Select("cartUrl").Select("menuUrl").Select("trackingUrl").Select("DaprAppId*").Select("cdnUrl");
 });
 
 var daprIds = builder.Configuration.GetSection("DaprAppId:PizzaConf").Get<DaprAppId>();

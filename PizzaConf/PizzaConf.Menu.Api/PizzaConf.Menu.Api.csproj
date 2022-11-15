@@ -9,18 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="media\order1.jpg" />
-    <None Remove="media\order2.jpg" />
-    <None Remove="media\order3.jpg" />
-    <None Remove="media\order4.jpg" />
-    <None Remove="media\pizza.jpg" />
-    <None Remove="media\pizza1.jpg" />
-    <None Remove="media\pizza2.jpg" />
-    <None Remove="media\pizza3.jpg" />
-    <None Remove="media\pizza4.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="media\order1.jpg" />
     <Content Include="media\order2.jpg" />
     <Content Include="media\order3.jpg" />
