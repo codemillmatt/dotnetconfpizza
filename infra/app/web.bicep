@@ -81,7 +81,8 @@ resource web 'Microsoft.App/containerApps@2022-06-01-preview' = {
 }
 
 resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = {
-  name: '${keyVault.name}/add'
+  name: 'add'
+  parent: keyVault
   properties: {
     accessPolicies: [
       {
@@ -98,11 +99,16 @@ resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2022-0
   }
 }
 
+resource appConfigReader 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+  name: '516239f1-63e1-4d78-a4de-a74fb236a071'
+  scope: subscription()
+}
+
 resource appConfigAccessPolicies 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(web.name, appConfig.name)
   scope: appConfig
   properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '516239f1-63e1-4d78-a4de-a74fb236a071')
+    roleDefinitionId: appConfigReader.id
     principalId: web.identity.principalId
     principalType: 'ServicePrincipal'
   }
