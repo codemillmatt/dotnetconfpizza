@@ -22,6 +22,9 @@ param menuUrlValue string
 param imageCdnHostUrlKeyName string
 param imageCdnHostUrlValue string
 
+param imageStorageUrlKeyName string
+param imageStorageUrlValue string
+
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2022-05-01' = {
   name: name
   location: location
@@ -95,6 +98,14 @@ resource menuUrlStore 'Microsoft.AppConfiguration/configurationStores/keyValues@
   name: menuUrlKeyName
   properties: {
     value: menuUrlValue
+  }
+}
+
+resource imageStorageUrlStore 'Microsoft.AppConfiguration/configurationStores/keyValues@2022-05-01' = {
+  parent: appConfig
+  name: imageStorageUrlKeyName
+  properties: {
+    value: imageStorageUrlValue
   }
 }
 

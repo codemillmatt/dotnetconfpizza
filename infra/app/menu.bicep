@@ -7,6 +7,7 @@ param appConfigName string
 param keyVaultName string
 param containerRegistryName string
 param imageName string
+param azureStorageAccountName string
 
 var serviceName = 'menu'
 
@@ -24,6 +25,10 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' existing = {
   name: containerRegistryName
+}
+
+resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' existing = {
+  name: azureStorageAccountName
 }
 
 resource menuApi 'Microsoft.App/containerApps@2022-06-01-preview' = {
@@ -103,6 +108,16 @@ resource appConfigAccessPolicies 'Microsoft.Authorization/roleAssignments@2022-0
   scope: appConfig
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '516239f1-63e1-4d78-a4de-a74fb236a071')
+    principalId: menuApi.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+resource storageAccountAccessPolicies 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(menuApi.name, storageAccount.name)
+  scope: storageAccount
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
     principalId: menuApi.identity.principalId
     principalType: 'ServicePrincipal'
   }

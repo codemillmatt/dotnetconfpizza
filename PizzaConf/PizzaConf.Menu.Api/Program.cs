@@ -19,7 +19,7 @@ builder.Configuration.AddAzureAppConfiguration((options) =>
         throw new NullReferenceException($"{nameof(appConfigUri)} setting needs to have the Azure App Config url set.");
 
     options.Connect(new Uri(appConfigUri), new DefaultAzureCredential())
-        .Select("menuDb")
+        .Select("menuDb").Select("imageStorageUrl")
         .ConfigureKeyVault(options => options.SetCredential(new DefaultAzureCredential()));
 });
 
@@ -66,5 +66,6 @@ app.MapGet("/pizzas/{id}", async (int id, [FromServices]PizzaService pizzaServic
 .Produces<Pizza>(StatusCodes.Status200OK);
 
 app.CreateDbIfNotExists();
+await app.UploadImages(builder.Configuration["imageStorageUrl"]);
 
 app.Run();

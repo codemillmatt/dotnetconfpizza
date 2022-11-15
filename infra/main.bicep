@@ -44,6 +44,7 @@ param appConfigMenuDbKeyName string = 'menuDb'
 param appConfigMenuUrlKeyName string = 'menuUrl'
 param appConfigTrackingUrlKeyName string = 'trackingUrl'
 param appConfigCdnUrlKeyName string = 'cdnUrl'
+param appConfigImageStorageUrlKeyName string = 'imageStorageUrl'
 
 param functionAppName string = ''
 param functionAppPlanName string = ''
@@ -148,6 +149,8 @@ module appConfig './core/app-config/azure-app-config.bicep' = {
         signalRSecretUri: signalr.outputs.signalRSecretUri
         imageCdnHostUrlKeyName: appConfigCdnUrlKeyName
         imageCdnHostUrlValue: cdn.outputs.hostName
+        imageStorageUrlKeyName: appConfigImageStorageUrlKeyName
+        imageStorageUrlValue: storage.outputs.pizzaImageContainerUrl
     }
 }
 

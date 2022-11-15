@@ -9,7 +9,33 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="media\order1.jpg" />
+    <None Remove="media\order2.jpg" />
+    <None Remove="media\order3.jpg" />
+    <None Remove="media\order4.jpg" />
+    <None Remove="media\pizza.jpg" />
+    <None Remove="media\pizza1.jpg" />
+    <None Remove="media\pizza2.jpg" />
+    <None Remove="media\pizza3.jpg" />
+    <None Remove="media\pizza4.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="media\order1.jpg" />
+    <Content Include="media\order2.jpg" />
+    <Content Include="media\order3.jpg" />
+    <Content Include="media\order4.jpg" />
+    <Content Include="media\pizza.jpg" />
+    <Content Include="media\pizza1.jpg" />
+    <Content Include="media\pizza2.jpg" />
+    <Content Include="media\pizza3.jpg" />
+    <Content Include="media\pizza4.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.7.0" />
+    <PackageReference Include="Azure.Storage.Common" Version="12.13.0" />
+	  <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0-rc.2.22476.2" />
     <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
