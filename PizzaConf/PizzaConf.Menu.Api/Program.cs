@@ -19,7 +19,7 @@ builder.Configuration.AddAzureAppConfiguration((options) =>
         throw new NullReferenceException($"{nameof(appConfigUri)} setting needs to have the Azure App Config url set.");
 
     options.Connect(new Uri(appConfigUri), new DefaultAzureCredential())
-        .Select("menuDb").Select("imageStorageUrl")
+        .Select("menuDb")
         .ConfigureKeyVault(options => options.SetCredential(new DefaultAzureCredential()));
 });
 
