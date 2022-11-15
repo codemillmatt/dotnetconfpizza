@@ -23,7 +23,7 @@
       "containerRegistryName": {
         "value": "${AZURE_CONTAINER_REGISTRY_NAME}"
       },
-      "storageAccountName": {
+      "azureStorageAccountName": {
         "value": "${AZURE_STORAGE_ACCOUNT_NAME}"
       }
     }

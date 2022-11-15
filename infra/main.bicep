@@ -53,7 +53,6 @@ param containerAppsEnvironmentName string = ''
 param containerRegistryName string = ''
 param logAnalyticsName string = ''
 
-
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
 var abbrs = loadJsonContent('abbreviations.json')
