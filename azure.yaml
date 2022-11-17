@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: dotnetconfpizza
+metadata:
+  template: dotnetconf-whirlwind@0.0.1-beta
+services:
+  tracker:
+    project: PizzaConf/PizzaConf.DeliveryTracker
+    language: csharp
+    host: function
+  menu:
+    project: PizzaConf/PizzaConf.Menu.Api
+    dist: build
+    language: csharp
+    host: containerapp
+    module: app/menu
+    docker:
+      path: ./Dockerfile
+      context: ../
+  checkout:
+    project: PizzaConf/PizzaConf.Checkout.Api
+    dist: build
+    language: csharp
+    host: containerapp
+    module: app/checkout
+    docker:
+      path: ./Dockerfile
+      context: ../
+  web:
+    project: PizzaConf/PizzaConf.Web
+    dist: build
+    language: csharp
+    host: containerapp  
+    module: app/web  
+    docker:
+      path: ./Dockerfile
+      context: ../

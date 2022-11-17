@@ -20,8 +20,12 @@
 
     HubConnection? hubConnection;
 
+    string cdnUrl;
+
     protected override async Task OnInitializedAsync()
     {
+        cdnUrl = configuration.GetValue<string>("cdnUrl");
+
         if (hubConnection != null && hubConnection.State == HubConnectionState.Connected)
             await hubConnection.StopAsync();
 
@@ -32,7 +36,7 @@
 
         hubConnection.On<TrackingMessage>("newMessage", (obj) =>
         {
-            OrderStatusUrl = obj.StatusUrl;
+            OrderStatusUrl = $"{cdnUrl}/pizzaimages/{obj.StatusUrl}";
             OrderStatus = obj.Status;
             StateHasChanged();
         });

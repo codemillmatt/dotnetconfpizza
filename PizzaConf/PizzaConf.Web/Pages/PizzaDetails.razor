@@ -7,6 +7,8 @@
 @inject CartWebService cartService
 @inject NavigationManager navigation
 
+@inject IConfiguration configuration
+
 <PageTitle>Pizza Details</PageTitle>
 
 @if (pizza == null)
@@ -34,11 +36,17 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private Pizza pizza;
+    private string? cdnUrl;
+
+    private Pizza? pizza;
 
     protected override async Task OnInitializedAsync()
     {
+        cdnUrl = configuration.GetValue<string>("cdnUrl");
+
         pizza = await pizzaService.GetPizza(Id);
+
+        pizza.ImageUrl = $"{cdnUrl}/pizzaimages/{pizza.ImageUrl}";
     }
 
     private async Task AddToOrder()

@@ -66,5 +66,6 @@ app.MapGet("/pizzas/{id}", async (int id, [FromServices]PizzaService pizzaServic
 .Produces<Pizza>(StatusCodes.Status200OK);
 
 app.CreateDbIfNotExists();
+await app.UploadImages(builder.Configuration["imageStorageUrl"]);
 
 app.Run();

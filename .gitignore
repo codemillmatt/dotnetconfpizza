@@ -354,3 +354,5 @@ MigrationBackup/
 /PizzaConf/PizzaConf.Checkout.Api/checkout.db
 /PizzaConf/PizzaConf.Checkout.Api/checkout.db-shm
 /PizzaConf/PizzaConf.Checkout.Api/checkout.db-wal
+
+.azure
